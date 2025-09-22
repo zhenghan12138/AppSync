@@ -17,9 +17,9 @@ extern char ***_NSGetEnviron(void);
 extern int proc_listallpids(void *, int);
 extern int proc_pidpath(int, void *, uint32_t);
 
-static const char *cynject_path = ROOT_PATH("/usr/bin/cynject");
-static const char *inject_criticald_path = ROOT_PATH("/electra/inject_criticald");
-static const char *dylib_path = ROOT_PATH("/Library/MobileSubstrate/DynamicLibraries/AppSyncUnified-installd.dylib");
+static char *cynject_path = NULL;
+static char *inject_criticald_path = NULL;
+static char *dylib_path = NULL;
 static const char *dispatch_queue_name = NULL;
 static const char *process_name = "installd";
 static int process_buffer_size = 4096;
@@ -95,6 +95,11 @@ static void inject_dylib(const char *name, pid_t pid, const char *dylib) {
 }
 
 int main(int argc, char *argv[]) {
+	// Initialize paths using ROOT_PATH
+	cynject_path = ROOT_PATH("/usr/bin/cynject");
+	inject_criticald_path = ROOT_PATH("/electra/inject_criticald");
+	dylib_path = ROOT_PATH("/Library/MobileSubstrate/DynamicLibraries/AppSyncUnified-installd.dylib");
+	
 	printf("asu_inject for AppSync Unified\n");
 	printf("Copyright (C) 2014-2024 Karen/あけみ\n");
 	if (access(DPKG_PATH, F_OK) == -1) {
